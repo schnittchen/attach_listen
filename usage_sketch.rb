@@ -35,8 +35,7 @@
   #The requirement provides its state as an attachable predicate, so you can nest requirements for refinement.
 
 
-  req.dispatch_with(dispatcher) # ??
-
+  req.dispatch_with(dispatcher) #who's api still needs to be defined
 end # <- connection is established after config block is left
 
 @registered_req.disconnect #detach from providers. help your garbage collector!
@@ -98,12 +97,15 @@ end
 
 #easier configuration:
 
-AttachListen.requirement_configuration(:token) do |config|
+AttachListen::Requirement.configuration(:token) do |config|
   config.mode :stateful
 
-  config.treat_disconnected_as_unmet!
-
   config.instrument { ... }
+  config.dispatch_with(dispatcher)
 end
 
 AttachListen::Requirement.to_be(..., :config => :token) { ... }
+AttachListen::Requirement.to_be(...) do |req|
+  req.configure(:token)
+  
+end
